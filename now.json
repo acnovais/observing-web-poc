@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "name": "observability",
+  "builds": [
+      { "src": "build/**", "use": "@now/static" },
+      { "src": "api/beacon/index.js", "use": "@now/node" }
+  ],
+  "routes": [
+    {"src": "^/static/(.*)", "dest": "/build/static/$1"},
+    {"src": "/api/beacon", "dest": "api/beacon"},
+    {"src": ".*", "dest": "/build/index.html"}
+  ]
+}
