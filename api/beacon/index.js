@@ -1,4 +1,4 @@
-const jsonBody = require('body/json');
+const formBody = require('body/form');
 
 module.exports = (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -11,7 +11,7 @@ module.exports = (req, res) => {
   if(req.method === 'OPTIONS') {
     res.sendStatus(200);
   } else {
-    jsonBody(req, res, (err, body) => {
+    formBody(req, res, (err, body) => {
       if (err) {
         res.statusCode = 500
         return res.end("NO U")
