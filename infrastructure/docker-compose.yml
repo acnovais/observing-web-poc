@@ -1,0 +1,42 @@
+version: '3'
+services:
+  boomcatch:
+    build:
+      context: .
+      dockerfile: Dockerfile-boomcatch
+    image: boomcatch:tag
+    ports:
+      - "9000:9000"
+    links:
+      - statsd-exporter
+    command: ["--fwdHost", "statsd-exporter", "--fwdPort", "9125", "--prefix", "webapp", "--port", "9000"]
+  statsd-exporter:
+    image: "prom/statsd-exporter"
+    ports:
+      - "9102:9102"
+      - "9125:9125"
+      - "9125:9125/udp"
+    volumes:
+      - "./statsd_mapping.yml:/tmp/statsd_mapping.yml"
+    command: ["--statsd.mapping-config=/tmp/statsd_mapping.yml", "--log.level=debug"]
+  prometheus:
+    image: "prom/prometheus"
+    ports: 
+      - "9090:9090"
+    links:
+      - "statsd-exporter"
+    volumes:
+      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "prometheus-storage:/data"
+  grafana:
+    image: "grafana/grafana"
+    volumes:
+      - "grafana-storage:/var/lib/grafana"
+    ports:
+      - "8080:3000"
+    links:
+      - "prometheus"
+
+volumes:
+  grafana-storage:
+  prometheus-storage:

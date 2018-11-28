@@ -1,0 +1,17 @@
+mappings:
+  - match: webapp.rt.*
+    name: "rt_timer"
+    labels:
+      type: $1
+  - match: webapp.navtiming.*
+    name: "navtiming_timer"
+    labels:
+      type: $1
+  - match: webapp.restiming.*.*.*.*.*
+    name: "restiming_timer"
+    labels:
+      type: $5
+      page: $1
+      resource_index: $2
+      initiator: $3
+      resource_url: $4
